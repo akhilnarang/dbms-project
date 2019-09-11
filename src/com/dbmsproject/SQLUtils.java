@@ -1,3 +1,5 @@
+package src.com.dbmsproject;
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -44,7 +46,7 @@ public class SQLUtils {
     SQLUtils(JFrame currentFrame) {
         this.currentFrame = currentFrame;
         Properties credentials = new Properties();
-        try (FileReader fileReader = new FileReader("../login.properties")) {
+        try (FileReader fileReader = new FileReader("../../../login.properties")) {
             credentials.load(fileReader);
         } catch (FileNotFoundException e) {
             Utils.showMessage(currentFrame, "Properties file not found!\n" + e.getMessage());
