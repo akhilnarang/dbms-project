@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+import java.sql.ResultSet;
 
 /**
  *
@@ -121,7 +117,33 @@ public class LoginPage extends javax.swing.JFrame {
     }//GEN-LAST:event_resetButtonActionPerformed
 
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
-        // TODO add your handling code here:
+        String username = usernameInput.getText();
+        String password = new String(passwordInput.getPassword());
+        if (username.equals("") || password.equals("")) {
+            Utils.showMessage(this,"Please enter proper details");
+            return;
+        }
+
+        if (username.length() > 20 || password.length() > 20) {
+            Utils.showMessage(this,"Credentials cannot be longer than 20 characters");
+            return;
+        }
+
+        SQLUtils sql = new SQLUtils(this);
+        ResultSet resultSet = sql.selectQueryWhere("username, password", "users", String.format("username=%s", username), "");
+        if (!resultSet.next()) {
+            Utils.showMessage(this, String.format("Invalid username %s", username));
+        }
+        String pw = resultSet.getString("password");
+        if(pw.equals(Utils.decrypt(password)))
+        {
+             this.dispose();
+        }
+        else
+        {
+            Utils.showMessage(this,"Invalid password for user "+username);
+            passwordInput.setText("");
+        }
     }//GEN-LAST:event_loginButtonActionPerformed
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed

@@ -1,10 +1,12 @@
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Properties;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -44,6 +46,10 @@ public class SQLUtils {
         Properties credentials = new Properties();
         try (FileReader fileReader = new FileReader("../login.properties")) {
             credentials.load(fileReader);
+        } catch (FileNotFoundException e) {
+            Utils.showMessage(currentFrame, "Properties file not found!\n" + e.getMessage());
+        } catch (IOException e) {
+            Utils.showMessage(currentFrame, "IOException occurred!\n" + e.getMessage());
         }
         String username = credentials.getProperty("username", "root");
         String password = credentials.getProperty("password", "student123");
@@ -66,7 +72,7 @@ public class SQLUtils {
     
     ResultSet query(String query) {
         try {
-            return statement.executeQuery(query);
+            return statement.executeQuery(String.format("%s;", query);
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(currentFrame, "Error occurred while running query: " + query + "\n" + e.getMessage());
         }
