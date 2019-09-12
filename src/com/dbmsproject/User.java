@@ -3,6 +3,8 @@ package src.com.dbmsproject;
 /**
  * @author akhil
  */
+
+// This class represents a User
 public class User extends DBObject {
     int id;
     String username;
