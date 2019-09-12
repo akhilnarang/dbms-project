@@ -1,6 +1,8 @@
-package src.com.dbmsproject;
+package com.dbmsproject;
 
 import java.sql.ResultSet;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author akhil
@@ -131,12 +133,17 @@ public class LoginPage extends javax.swing.JFrame {
         }
 
         SQLUtils sql = new SQLUtils(this);
-        ResultSet resultSet = sql.selectQueryWhere("username, password", "users", String.format("username=%s", username), "");
-        if (!resultSet.next()) {
-            Utils.showMessage(this, String.format("Invalid username %s", username));
+        Map<String, Object> resultSet = sql.selectQueryWhere("username, password", "users", String.format("username=\'%s\'", username), "").get(0);
+        if (resultSet.isEmpty()) {
+            Utils.showMessage(this, String.format("Invalid username %s!", username));
+            resetButton.doClick();
+            return;
         }
-        String pw = resultSet.getString("password");
-        if (pw.equals(Utils.decrypt(password))) {
+        System.out.println(resultSet.get("password"));
+        System.out.println(resultSet.keySet());
+        User user1 = new User(resultSet);
+        User user2 = new User(username, password);
+        if (user1.verify(user2)) {
             this.dispose();
         } else {
             Utils.showMessage(this, "Invalid password for user " + username);

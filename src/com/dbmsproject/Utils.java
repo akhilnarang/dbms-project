@@ -1,4 +1,4 @@
-package src.com.dbmsproject;
+package com.dbmsproject;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;

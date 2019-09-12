@@ -1,11 +1,11 @@
-package src.com.dbmsproject;
+package com.dbmsproject;
 
 import javax.swing.*;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * @author akhil
@@ -30,7 +30,7 @@ class Database {
 
     // Allows us to easily get the new URI if we changed some parameters
     String getConnectionURI() {
-        return "mysql:jdbc://" + user + ":" + password + "@" + host + ":" + port + "/" + database;
+        return "jdbc:mysql://" + user + ":" + password + "@" + host + ":" + port + "/" + database;
     }
 }
 
@@ -44,7 +44,7 @@ public class SQLUtils {
         this.currentFrame = currentFrame;
         // Use the Properties class to load credentials from a file which is ignored by git
         Properties credentials = new Properties();
-        try (FileReader fileReader = new FileReader("../../../login.properties")) {
+        try (FileReader fileReader = new FileReader("login.properties")) {
             credentials.load(fileReader);
         } catch (FileNotFoundException e) {
             Utils.showMessage(currentFrame, "Properties file not found!\n" + e.getMessage());
@@ -72,9 +72,9 @@ public class SQLUtils {
     }
 
     // This method returns a ResultSet based on the select query passed to it
-    ResultSet query(String query) {
+    List<Map<String, Object>> query(String query) {
         try {
-            return statement.executeQuery(String.format("%s;", query);
+            return resultSetToList(statement.executeQuery(String.format("%s;", query)));
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(currentFrame, "Error occurred while running query: " + query + "\n" + e.getMessage());
         }
@@ -82,12 +82,12 @@ public class SQLUtils {
     }
 
     // This method returns a ResultSet after formulating a query based on the parameters passed to it
-    ResultSet selectQuery(String items, String table, String miscellaneous) {
+    List<Map<String, Object>> selectQuery(String items, String table, String miscellaneous) {
         return this.query(String.format("select %s from %s %s", items, table, miscellaneous));
     }
 
     // This method returns a ResultSet after formulating a query based on the parameters passed to it
-    ResultSet selectQueryWhere(String items, String table, String whereCondition, String miscellaneous) {
+    List<Map<String, Object>> selectQueryWhere(String items, String table, String whereCondition, String miscellaneous) {
         return this.selectQuery(items, table, String.format("where %s %s", whereCondition, miscellaneous));
     }
 
@@ -123,5 +123,26 @@ public class SQLUtils {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(currentFrame, "Error occurred while closing connection to database!\n" + e.getMessage());
         }
+    }
+
+    /**
+     * Convert the ResultSet to a List of Maps, where each Map represents a row with columnNames and columValues
+     *
+     * @param rs
+     * @return
+     * @throws SQLException
+     */
+    List<Map<String, Object>> resultSetToList(ResultSet rs) throws SQLException {
+        ResultSetMetaData md = rs.getMetaData();
+        int columns = md.getColumnCount();
+        List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>();
+        while (rs.next()) {
+            Map<String, Object> row = new HashMap<String, Object>(columns);
+            for (int i = 1; i <= columns; ++i) {
+                row.put(md.getColumnName(i), rs.getObject(i));
+            }
+            rows.add(row);
+        }
+        return rows;
     }
 }
