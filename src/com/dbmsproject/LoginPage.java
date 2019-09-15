@@ -1,7 +1,5 @@
 package com.dbmsproject;
 
-import java.sql.ResultSet;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -133,14 +131,12 @@ public class LoginPage extends javax.swing.JFrame {
         }
 
         SQLUtils sql = new SQLUtils(this);
-        Map<String, Object> resultSet = sql.selectQueryWhere("username, password", "users", String.format("username=\'%s\'", username), "").get(0);
+        Map<String, Object> resultSet = sql.selectQueryWhere("*", "users", String.format("username=\'%s\'", username), "").get(0);
         if (resultSet.isEmpty()) {
             Utils.showMessage(this, String.format("Invalid username %s!", username));
             resetButton.doClick();
             return;
         }
-        System.out.println(resultSet.get("password"));
-        System.out.println(resultSet.keySet());
         User user1 = new User(resultSet);
         User user2 = new User(username, password);
         if (user1.verify(user2)) {
@@ -149,6 +145,7 @@ public class LoginPage extends javax.swing.JFrame {
             Utils.showMessage(this, "Invalid password for user " + username);
             passwordInput.setText("");
         }
+        sql.close();
     }//GEN-LAST:event_loginButtonActionPerformed
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed

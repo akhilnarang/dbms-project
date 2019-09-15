@@ -11,11 +11,17 @@ public class User extends DBObject {
     int id;
     String username;
     String password;
+    String email;
 
-    User(int id, String username, String password) {
+    User(int id, String username, String password, String email) {
         this.id = id;
         this.username = username;
         this.password = password;
+        this.email = email;
+    }
+
+    User(int id, String username, String password) {
+        this(id, username, password, "");
     }
 
     User(String username, String password) {
@@ -23,9 +29,7 @@ public class User extends DBObject {
     }
 
     User(Map<String, Object> user) {
-        this.id = Integer.valueOf(user.get("id").toString());
-        this.username = user.get("username").toString();
-        this.password = user.get("password").toString();
+        this(Integer.parseInt(user.get("id").toString()), user.get("username").toString(), user.get("password").toString(), user.get("email").toString());
     }
 
     int getId() {
@@ -38,10 +42,11 @@ public class User extends DBObject {
 
     @Override
     String getValues() {
-        return String.format("values (%s, %s, %s);", id, username, password);
+        return String.format("values (%s, \'%s\', \'%s\', \'%s\');", id, username, password, email);
     }
 
     boolean verify(User user) {
         return this.password.equals(Utils.encrypt(user.password));
     }
+
 }

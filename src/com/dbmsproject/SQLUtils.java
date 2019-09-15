@@ -47,7 +47,7 @@ public class SQLUtils {
         try (FileReader fileReader = new FileReader("login.properties")) {
             credentials.load(fileReader);
         } catch (FileNotFoundException e) {
-            Utils.showMessage(currentFrame, "Properties file not found!\n" + e.getMessage());
+            Utils.showMessage(currentFrame, "Properties file not found!\nAssuming default values!\n" + e.getMessage());
         } catch (IOException e) {
             Utils.showMessage(currentFrame, "IOException occurred!\n" + e.getMessage());
         }
@@ -97,7 +97,7 @@ public class SQLUtils {
         // getValues will return a string in the form of values(1, 2, 3, 4) and so on, allowing us to add multiple rows
         String query = String.format("insert into %s %s", table, object.getValues());
         try {
-            n = statement.executeUpdate(table);
+            n = statement.executeUpdate(query);
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(currentFrame, "Error occurred while running query: " + query + "\n" + e.getMessage());
         }
@@ -135,9 +135,9 @@ public class SQLUtils {
     List<Map<String, Object>> resultSetToList(ResultSet rs) throws SQLException {
         ResultSetMetaData md = rs.getMetaData();
         int columns = md.getColumnCount();
-        List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> rows = new ArrayList<>();
         while (rs.next()) {
-            Map<String, Object> row = new HashMap<String, Object>(columns);
+            Map<String, Object> row = new HashMap<>(columns);
             for (int i = 1; i <= columns; ++i) {
                 row.put(md.getColumnName(i), rs.getObject(i));
             }
