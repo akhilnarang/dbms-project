@@ -168,6 +168,8 @@ public class CreateAccountPage extends javax.swing.JFrame {
         int n = sql.insert("users", user);
         Utils.showMessage(this, String.format("%d rows affected!", n));
         sql.close();
+        new HomePage().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_registerButtonActionPerformed
 
     private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed
