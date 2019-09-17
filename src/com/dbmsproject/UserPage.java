@@ -29,7 +29,7 @@ public class UserPage extends javax.swing.JFrame {
 
         Register = new javax.swing.JButton();
         Logout = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        Welcome = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -47,10 +47,10 @@ public class UserPage extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("DejaVu Sans", 0, 48)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Welcome, Aniket Raj!");
-        jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        Welcome.setFont(new java.awt.Font("DejaVu Sans", 0, 48)); // NOI18N
+        Welcome.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Welcome.setText("Welcome, "+LoginPage.loggedInUser.name);
+        Welcome.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -63,14 +63,14 @@ public class UserPage extends javax.swing.JFrame {
                         .addComponent(Register)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(Logout))
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(Welcome, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(104, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(68, 68, 68)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(Welcome, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 96, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Register)
@@ -130,6 +130,6 @@ public class UserPage extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Logout;
     private javax.swing.JButton Register;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel Welcome;
     // End of variables declaration//GEN-END:variables
 }
