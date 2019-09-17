@@ -49,7 +49,7 @@ public class UserPage extends javax.swing.JFrame {
 
         Welcome.setFont(new java.awt.Font("DejaVu Sans", 0, 48)); // NOI18N
         Welcome.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        Welcome.setText("Welcome, "+LoginPage.loggedInUser.name);
+        Welcome.setText("Welcome, "+OrganizerLoginPage.loggedInUser.username);
         Welcome.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
