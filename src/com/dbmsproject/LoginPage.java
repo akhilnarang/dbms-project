@@ -8,11 +8,13 @@ import java.util.Map;
 public class LoginPage extends javax.swing.JFrame {
 
     /**
-     * Creates new form LoginPag
+     * Creates new form LoginPage
      */
     public LoginPage() {
         initComponents();
     }
+
+    public static User loggedInUser = null;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -132,6 +134,7 @@ public class LoginPage extends javax.swing.JFrame {
 
         SQLUtils sql = new SQLUtils(this);
         Map<String, Object> resultSet = sql.selectQueryWhere("*", "users", String.format("username=\'%s\'", username), "").get(0);
+        sql.close();
         if (resultSet.isEmpty()) {
             Utils.showMessage(this, String.format("Invalid username %s!", username));
             resetButton.doClick();
@@ -140,12 +143,13 @@ public class LoginPage extends javax.swing.JFrame {
         User user1 = new User(resultSet);
         User user2 = new User(username, password);
         if (user1.verify(user2)) {
+            loggedInUser = user2;
+            new UserPage().setVisible(true);
             this.dispose();
         } else {
             Utils.showMessage(this, "Invalid password for user " + username);
             passwordInput.setText("");
         }
-        sql.close();
     }//GEN-LAST:event_loginButtonActionPerformed
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
