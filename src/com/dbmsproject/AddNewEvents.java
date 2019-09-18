@@ -5,6 +5,9 @@
  */
 package com.dbmsproject;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  *
  * @author akhil
@@ -33,7 +36,7 @@ public class AddNewEvents extends javax.swing.JFrame {
         eventNameLabel = new javax.swing.JLabel();
         resetButton = new javax.swing.JButton();
         registerButton = new javax.swing.JButton();
-        eventNameInput1 = new javax.swing.JTextField();
+        eventLocationInput = new javax.swing.JTextField();
         eventLocationLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -85,7 +88,7 @@ public class AddNewEvents extends javax.swing.JFrame {
                     .addComponent(eventNameLabel)
                     .addComponent(eventLocationLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(eventNameInput1, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(eventLocationInput, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(56, 56, 56))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
@@ -111,7 +114,7 @@ public class AddNewEvents extends javax.swing.JFrame {
                 .addGap(35, 35, 35)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(eventLocationLabel)
-                    .addComponent(eventNameInput1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(eventLocationInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(106, 106, 106)
                 .addComponent(exitButton)
                 .addContainerGap())
@@ -142,35 +145,29 @@ public class AddNewEvents extends javax.swing.JFrame {
         String event = eventNameInput.getText();
         String location = eventLocationInput.getText();
         int id = -1;
-        if (event.isEmpty() || password.isEmpty() || email.isEmpty()) {
+        if (event.isEmpty() || location.isEmpty()) {
             Utils.showMessage(this, "Please enter proper details");
             return;
         }
-        if (event.length() > 20 || password.length() > 20) {
+        if (event.length() > 20 || location.length() > 20) {
             Utils.showMessage(this, "Please enter shorter details(max 20 characters)");
             return;
         }
 
         SQLUtils sql = new SQLUtils(this);
-        List<Map<String, Object>> queryData = sql.selectQueryWhere("username", "users", String.format("username=\'%s\'", username), "");
+        List<Map<String, Object>> queryData = sql.selectQueryWhere("event", "events", String.format("name=\'%s\'", event), "");
         if (!queryData.isEmpty()) {
             Map<String, Object> resultSet = queryData.get(0);
             if (!resultSet.isEmpty()) {
-                Utils.showMessage(this, String.format("Invalid username %s, it is already taken!", username));
-                resetButton.doClick();
-                return;
-            }
-            resultSet = sql.selectQueryWhere("email", "users", String.format("email=\'%s\'", email), "").get(0);
-            if (!resultSet.isEmpty()) {
-                Utils.showMessage(this, String.format("Invalid email %s, it is already taken!", email));
+                Utils.showMessage(this, String.format("Invalid event name %s, it is already taken!", event));
                 resetButton.doClick();
                 return;
             }
         }
         queryData = sql.selectQuery("id", "users", "order by id desc limit 1");
         id = queryData.isEmpty() ? 1 : Integer.parseInt(queryData.get(0).get("id").toString()) + 1;
-        User user = new User(id, username, Utils.encrypt(password), email, phone);
-        int n = sql.insert("users", user);
+        Event e = new Event(id, event, location);
+        int n = sql.insert("event", e);
         Utils.showMessage(this, String.format("%d rows affected!", n));
         sql.close();
         new HomePage().setVisible(true);
@@ -213,9 +210,9 @@ public class AddNewEvents extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField eventLocationInput;
     private javax.swing.JLabel eventLocationLabel;
     private javax.swing.JTextField eventNameInput;
-    private javax.swing.JTextField eventNameInput1;
     private javax.swing.JLabel eventNameLabel;
     private javax.swing.JButton exitButton;
     private javax.swing.JLabel jLabel1;

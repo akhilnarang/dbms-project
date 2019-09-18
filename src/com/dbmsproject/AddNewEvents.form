@@ -43,7 +43,7 @@
                   <Component id="eventLocationLabel" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
-              <Component id="eventNameInput1" min="-2" pref="106" max="-2" attributes="0"/>
+              <Component id="eventLocationInput" min="-2" pref="106" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
           </Group>
           <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
@@ -76,7 +76,7 @@
               <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="eventLocationLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="eventNameInput1" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="eventLocationInput" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="106" max="-2" attributes="0"/>
               <Component id="exitButton" min="-2" max="-2" attributes="0"/>
@@ -137,7 +137,7 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="registerButtonActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JTextField" name="eventNameInput1">
+    <Component class="javax.swing.JTextField" name="eventLocationInput">
     </Component>
     <Component class="javax.swing.JLabel" name="eventLocationLabel">
       <Properties>
