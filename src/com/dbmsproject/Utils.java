@@ -1,9 +1,11 @@
 package com.dbmsproject;
 
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
+import com.sendgrid.*;
+
+import javax.swing.*;
+import java.io.IOException;
+
 /**
- *
  * @author akhil
  */
 
@@ -22,20 +24,19 @@ public class Utils {
 
     /**
      * This method <i>encrypts</i> the given string
+     *
      * @param s String to be encrypted
-     * Each Character of the String is XOR'd with the length of the String
+     *          Each Character of the String is XOR'd with the length of the String
      * @return String with each character XOR'd with length
      */
-    static String encrypt(String s)
-    {
+    static String encrypt(String s) {
         String n = "";
         int l = s.length();
-        for (int i=0;i<l;i++)
-        {
+        for (int i = 0; i < l; i++) {
             char c = s.charAt(i);
-            int t = (int)c;
+            int t = c;
             t = t ^ l;
-            c = (char)(t);
+            c = (char) (t);
             n += c;
         }
         return n;
@@ -46,4 +47,22 @@ public class Utils {
         return encrypt(s);
     }
 
+    static int sendEmail(String toEmail, String subject, String emailContent) {
+        Email from = new Email("dbms-project@thescriptgroup.in");
+        Email to = new Email(toEmail);
+        Content content = new Content("text/plain", emailContent);
+        Mail mail = new Mail(from, subject, to, content);
+        SendGrid sendGrid = new SendGrid(System.getenv("SENDGRID_API_KEY"));
+        Request request = new Request();
+        try {
+            request.setMethod(Method.POST);
+            request.setEndpoint("mail/send");
+            request.setBody(mail.build());
+            Response response = sendGrid.api(request);
+            return response.getStatusCode();
+        } catch (IOException e) {
+            Utils.showMessage(null, "Error occurred sending email!\n" + e.getMessage());
+        }
+        return -1;
+    }
 }

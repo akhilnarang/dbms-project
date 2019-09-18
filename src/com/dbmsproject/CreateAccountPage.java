@@ -189,6 +189,15 @@ public class CreateAccountPage extends javax.swing.JFrame {
         User user = new User(id, username, Utils.encrypt(password), email, phone);
         int n = sql.insert("users", user);
         Utils.showMessage(this, String.format("%d rows affected!", n));
+        String content = String.format("Hello %s, your account has been successfully created!", username) +
+                String.format("Your ID is %d!", id);
+        int responseCode = Utils.sendEmail(email, "Registration Mail", content);
+        if (responseCode == 200 || responseCode == 202) {
+            Utils.showMessage(this, "Mail has been sent!");
+        } else {
+            Utils.showMessage(this, "Error occurred sending mail!");
+            return;
+        }
         sql.close();
         new HomePage().setVisible(true);
         this.dispose();
