@@ -201,8 +201,8 @@ public class CreateAccountPage extends javax.swing.JFrame {
     }//GEN-LAST:event_resetButtonActionPerformed
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
-        Utils.showMessage(this, "Exiting");
-        System.exit(0);
+        new HomePage().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_exitButtonActionPerformed
 
     /**

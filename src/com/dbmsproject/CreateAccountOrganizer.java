@@ -124,8 +124,8 @@ public class CreateAccountOrganizer extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
-        Utils.showMessage(this, "Exiting");
-        System.exit(0);
+        new HomePage().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_exitButtonActionPerformed
 
     private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed

@@ -148,7 +148,7 @@ public class OrganizerLoginPage extends javax.swing.JFrame {
         Organizer user2 = new Organizer(username, password);
         if (user1.verify(user2)) {
             loggedInUser = user2;
-            new UserPage().setVisible(true);
+            new OrganizerPage().setVisible(true);
             this.dispose();
         } else {
             Utils.showMessage(this, "Invalid password for user " + username);
@@ -157,7 +157,8 @@ public class OrganizerLoginPage extends javax.swing.JFrame {
     }//GEN-LAST:event_loginButtonActionPerformed
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
-        Utils.exit(this);
+        new HomePage().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_exitButtonActionPerformed
 
     /**
