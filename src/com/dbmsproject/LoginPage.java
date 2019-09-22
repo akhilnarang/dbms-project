@@ -1,5 +1,6 @@
 package com.dbmsproject;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -133,14 +134,14 @@ public class LoginPage extends javax.swing.JFrame {
         }
 
         SQLUtils sql = new SQLUtils(this);
-        Map<String, Object> resultSet = sql.selectQueryWhere("*", "users", String.format("username=\'%s\'", username), "").get(0);
+        List<Map<String, Object>> resultSet = sql.selectQueryWhere("*", "users", String.format("username=\'%s\'", username), "");
         sql.close();
         if (resultSet.isEmpty()) {
             Utils.showMessage(this, String.format("Invalid username %s!", username));
             resetButton.doClick();
             return;
         }
-        User user1 = new User(resultSet);
+        User user1 = new User(resultSet.get(0));
         User user2 = new User(username, password);
         if (user1.verify(user2)) {
             loggedInUser = user2;
