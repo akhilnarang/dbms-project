@@ -7,6 +7,8 @@ package com.dbmsproject;
 import java.util.Map;
 
 public class Event extends DBObject {
+    final static String table = "events";
+
     int id;
     int organizer;
     String name;
@@ -27,5 +29,10 @@ public class Event extends DBObject {
     @Override
     String getValues() {
         return String.format("values (%s, \'%s\', \'%s\');", id, name, location);
+    }
+
+    @Override
+    String getTableName() {
+        return table;
     }
 }

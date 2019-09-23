@@ -166,7 +166,7 @@ public class AddNewEvents extends javax.swing.JFrame {
         queryData = sql.selectQuery("id", "users", "order by id desc limit 1");
         id = queryData.isEmpty() ? 1 : Integer.parseInt(queryData.get(0).get("id").toString()) + 1;
         Event e = new Event(id, OrganizerLoginPage.loggedInUser.id, event, location);
-        int n = sql.insert("event", e);
+        int n = sql.insert(e);
         Utils.showMessage(this, String.format("%d rows affected!", n));
         sql.close();
         new HomePage().setVisible(true);

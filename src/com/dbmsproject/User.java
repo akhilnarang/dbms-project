@@ -8,6 +8,8 @@ import java.util.Map;
 
 // This class represents a User
 public class User extends DBObject {
+    final static String table = "users";
+
     int id;
     String username;
     String password;
@@ -33,6 +35,11 @@ public class User extends DBObject {
     @Override
     String getValues() {
         return String.format("values (%s, \'%s\', \'%s\', \'%s\', %s);", id, username, password, email, phone);
+    }
+
+    @Override
+    String getTableName() {
+        return table;
     }
 
     boolean verify(User user) {

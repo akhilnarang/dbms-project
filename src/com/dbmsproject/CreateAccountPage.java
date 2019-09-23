@@ -187,7 +187,7 @@ public class CreateAccountPage extends javax.swing.JFrame {
         queryData = sql.selectQuery("id", "users", "order by id desc limit 1");
         id = queryData.isEmpty() ? 1 : Integer.parseInt(queryData.get(0).get("id").toString()) + 1;
         User user = new User(id, username, Utils.encrypt(password), email, phone);
-        int n = sql.insert("users", user);
+        int n = sql.insert(user);
         Utils.showMessage(this, String.format("%d rows affected!", n));
         String content = String.format("Hello %s, your account has been successfully created!", username) +
                 String.format("Your ID is %d!", id);

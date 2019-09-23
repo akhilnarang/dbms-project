@@ -8,6 +8,8 @@ import java.util.Map;
 
 // This class represents a Organizer
 public class Organizer extends DBObject {
+    final static String table = "organizers";
+
     int id;
     String username;
     String password;
@@ -38,6 +40,11 @@ public class Organizer extends DBObject {
     @Override
     String getValues() {
         return String.format("values (%s, \'%s\', \'%s\');", id, username, password);
+    }
+
+    @Override
+    String getTableName() {
+        return table;
     }
 
     boolean verify(Organizer user) {

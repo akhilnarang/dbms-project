@@ -36,6 +36,7 @@ class Database {
 
 // Class with bunch of helper methods related to basic MySQL queries
 public class SQLUtils {
+    final static boolean DEBUG = false;
     Connection connection;
     Statement statement;
     JFrame currentFrame;
@@ -73,6 +74,7 @@ public class SQLUtils {
 
     // This method returns a ResultSet based on the select query passed to it
     List<Map<String, Object>> query(String query) {
+        if (DEBUG) System.out.println(query);
         try {
             return resultSetToList(statement.executeQuery(String.format("%s;", query)));
         } catch (SQLException e) {
@@ -92,27 +94,27 @@ public class SQLUtils {
     }
 
     // This method inserts values into a table
-    int insert(String table, DBObject object) {
-        int n = -1;
+    int insert(DBObject object) {
         // getValues will return a string in the form of values(1, 2, 3, 4) and so on, allowing us to add multiple rows
-        String query = String.format("insert into %s %s", table, object.getValues());
+        String query = String.format("insert into %s %s", object.getTableName(), object.getValues());
+        if (DEBUG) System.out.println(query);
         try {
-            n = statement.executeUpdate(query);
+            return statement.executeUpdate(query);
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(currentFrame, "Error occurred while running query: " + query + "\n" + e.getMessage());
         }
-        return n;
+        return -1;
     }
 
     // This method updates rows in the table
     int update(String query) {
-        int n = -1;
+        if (DEBUG) System.out.println(query);
         try {
-            n = statement.executeUpdate(query);
+            return statement.executeUpdate(query);
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(currentFrame, "Error occurred while running query: " + query + "\n" + e.getMessage());
         }
-        return n;
+        return -1;
     }
 
     // This method closes the statement and connection objects
