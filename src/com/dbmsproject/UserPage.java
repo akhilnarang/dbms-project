@@ -82,11 +82,11 @@ public class UserPage extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void RegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegisterActionPerformed
-        // TODO add your handling code here:
+        new RegisterEvent().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_RegisterActionPerformed
 
     private void LogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogoutActionPerformed
-        // TODO add your handling code here:
         LoginPage.loggedInUser = null;
         new HomePage().setVisible(true);
         this.dispose();
