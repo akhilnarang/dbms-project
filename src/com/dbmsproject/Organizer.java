@@ -29,14 +29,6 @@ public class Organizer extends DBObject {
         this(Integer.parseInt(user.get("id").toString()), user.get("name").toString(), user.get("password").toString());
     }
 
-    int getId() {
-        return this.id;
-    }
-
-    void setId(int id) {
-        this.id = id;
-    }
-
     @Override
     String getValues() {
         return String.format("values (%s, \'%s\', \'%s\');", id, username, password);
@@ -50,5 +42,4 @@ public class Organizer extends DBObject {
     boolean verify(Organizer user) {
         return this.password.equals(Utils.encrypt(user.password));
     }
-
 }
