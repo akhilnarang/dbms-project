@@ -26,7 +26,7 @@ public class Organizer extends DBObject {
     }
 
     Organizer(Map<String, Object> user) {
-        this(Integer.parseInt(user.get("id").toString()), user.get("name").toString(), user.get("password").toString());
+        this(Integer.parseInt(user.get("id").toString()), user.get("username").toString(), user.get("password").toString());
     }
 
     @Override

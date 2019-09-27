@@ -144,7 +144,7 @@ public class LoginPage extends javax.swing.JFrame {
         User user1 = new User(resultSet.get(0));
         User user2 = new User(username, password);
         if (user1.verify(user2)) {
-            loggedInUser = user2;
+            loggedInUser = user1;
             new UserPage().setVisible(true);
             this.dispose();
         } else {

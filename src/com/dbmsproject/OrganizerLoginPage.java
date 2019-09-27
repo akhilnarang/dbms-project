@@ -138,7 +138,7 @@ public class OrganizerLoginPage extends javax.swing.JFrame {
         }
 
         SQLUtils sql = new SQLUtils(this);
-        Map<String, Object> resultSet = sql.selectQueryWhere("*", "organizers", String.format("name=\'%s\'", username), "").get(0);
+        Map<String, Object> resultSet = sql.selectQueryWhere("*", "organizers", String.format("username=\'%s\'", username), "").get(0);
         sql.close();
         if (resultSet.isEmpty()) {
             Utils.showMessage(this, String.format("Invalid username %s!", username));
@@ -148,7 +148,7 @@ public class OrganizerLoginPage extends javax.swing.JFrame {
         Organizer user1 = new Organizer(resultSet);
         Organizer user2 = new Organizer(username, password);
         if (user1.verify(user2)) {
-            loggedInUser = user2;
+            loggedInUser = user1;
             new OrganizerPage().setVisible(true);
             this.dispose();
         } else {

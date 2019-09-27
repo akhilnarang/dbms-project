@@ -188,7 +188,12 @@ public class CreateAccountPage extends javax.swing.JFrame {
         id = queryData.isEmpty() ? 1 : Integer.parseInt(queryData.get(0).get("id").toString()) + 1;
         User user = new User(id, username, Utils.encrypt(password), email, phone);
         int n = sql.insert(user);
-        Utils.showMessage(this, String.format("%d rows affected!", n));
+        sql.close();
+        if (n != 1) {
+            Utils.showMessage(this, String.format("%d rows affected!\nSomething is wrong!", n));
+            new HomePage().setVisible(true);
+            this.dispose();
+        }
         String content = String.format("Hello %s, your account has been successfully created!", username) +
                 String.format("Your ID is %d!", id);
         int responseCode = Utils.sendEmail(email, "Registration Mail", content);
@@ -198,7 +203,6 @@ public class CreateAccountPage extends javax.swing.JFrame {
             Utils.showMessage(this, "Error occurred sending mail!");
             return;
         }
-        sql.close();
         new HomePage().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_registerButtonActionPerformed

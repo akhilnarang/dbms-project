@@ -150,7 +150,7 @@ public class CreateAccountOrganizer extends javax.swing.JFrame {
         }
 
         SQLUtils sql = new SQLUtils(this);
-        List<Map<String, Object>> queryData = sql.selectQueryWhere("username", "users", String.format("username=\'%s\'", username), "");
+        List<Map<String, Object>> queryData = sql.selectQueryWhere("username", "organizers", String.format("username=\'%s\'", username), "");
         if (!queryData.isEmpty()) {
             Map<String, Object> resultSet = queryData.get(0);
             if (!resultSet.isEmpty()) {
@@ -163,7 +163,7 @@ public class CreateAccountOrganizer extends javax.swing.JFrame {
         id = queryData.isEmpty() ? 1 : Integer.parseInt(queryData.get(0).get("id").toString()) + 1;
         Organizer organizer = new Organizer(id, username, Utils.encrypt(password));
         int n = sql.insert(organizer);
-        Utils.showMessage(this, String.format("%d rows affected!", n));
+        if (sql.DEBUG) Utils.showMessage(this, String.format("%d rows affected!", n));
         sql.close();
         new HomePage().setVisible(true);
         this.dispose();

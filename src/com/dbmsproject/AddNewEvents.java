@@ -154,7 +154,7 @@ public class AddNewEvents extends javax.swing.JFrame {
         }
 
         SQLUtils sql = new SQLUtils(this);
-        List<Map<String, Object>> queryData = sql.selectQueryWhere("event", "events", String.format("name=\'%s\'", event), "");
+        List<Map<String, Object>> queryData = sql.selectQueryWhere("*", "events", String.format("name=\'%s\'", event), "");
         if (!queryData.isEmpty()) {
             Map<String, Object> resultSet = queryData.get(0);
             if (!resultSet.isEmpty()) {
@@ -163,13 +163,14 @@ public class AddNewEvents extends javax.swing.JFrame {
                 return;
             }
         }
-        queryData = sql.selectQuery("id", "users", "order by id desc limit 1");
+        queryData = sql.selectQuery("id", "events", "order by id desc limit 1");
         id = queryData.isEmpty() ? 1 : Integer.parseInt(queryData.get(0).get("id").toString()) + 1;
+
         Event e = new Event(id, OrganizerLoginPage.loggedInUser.id, event, location);
         int n = sql.insert(e);
         Utils.showMessage(this, String.format("%d rows affected!", n));
         sql.close();
-        new HomePage().setVisible(true);
+        new OrganizerPage().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_registerButtonActionPerformed
 

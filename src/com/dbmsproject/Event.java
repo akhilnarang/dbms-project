@@ -28,7 +28,7 @@ public class Event extends DBObject {
 
     @Override
     String getValues() {
-        return String.format("values (%s, \'%s\', \'%s\');", id, name, location);
+        return String.format("values (%s, %s, \'%s\', \'%s\');", id, organizer, name, location);
     }
 
     @Override

@@ -1,11 +1,21 @@
 package com.dbmsproject;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.sql.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.Statement;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * @author akhil
@@ -106,6 +116,16 @@ public class SQLUtils {
         return -1;
     }
 
+    int insert(String query) {
+        if (DEBUG) System.out.println(query);
+        try {
+            return statement.executeUpdate(query);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(currentFrame, "Error occurred while running query: " + query + "\n" + e.getMessage());
+        }
+        return -1;
+    }
+
     // This method updates rows in the table
     int update(String query) {
         if (DEBUG) System.out.println(query);
@@ -139,7 +159,7 @@ public class SQLUtils {
         int columns = md.getColumnCount();
         List<Map<String, Object>> rows = new ArrayList<>();
         while (rs.next()) {
-            Map<String, Object> row = new HashMap<>(columns);
+            Map<String, Object> row = new LinkedHashMap<>(columns);
             for (int i = 1; i <= columns; ++i) {
                 row.put(md.getColumnName(i), rs.getObject(i));
             }
