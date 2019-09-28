@@ -111,7 +111,7 @@ public class RegisterEvent extends javax.swing.JFrame {
             Utils.showMessage(this, String.format("Error occurred during registration, %d rows modified!", n));
             return;
         }
-        String content = String.format("Hello %s, your registration is successfully done for the event %s organized by %s help at %s!", u.username, event, organizer, location);
+        String content = String.format("Hello %s, your registration is successfully done for the event %s organized by %s at %s!", u.username, event, organizer, location);
         int responseCode = Utils.sendEmail(u.email, "Event Registration Mail", content);
         if (responseCode == 200 || responseCode == 202) {
             Utils.showMessage(this, "Mail has been sent!");

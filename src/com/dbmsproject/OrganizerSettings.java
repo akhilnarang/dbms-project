@@ -27,21 +27,116 @@ public class OrganizerSettings extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        deleteAccountButton = new javax.swing.JButton();
+        goBackButton = new javax.swing.JButton();
+        currentPasswordField = new javax.swing.JPasswordField();
+        newPasswordField = new javax.swing.JPasswordField();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        updatePasswordButton = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        deleteAccountButton.setText("Delete account");
+        deleteAccountButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteAccountButtonActionPerformed(evt);
+            }
+        });
+
+        goBackButton.setText("Go back");
+        goBackButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                goBackButtonActionPerformed(evt);
+            }
+        });
+
+        currentPasswordField.setText("jPasswordField1");
+
+        newPasswordField.setText("jPasswordField2");
+
+        jLabel1.setText("Current password");
+
+        jLabel2.setText("New password");
+
+        updatePasswordButton.setText("Update password");
+        updatePasswordButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updatePasswordButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(32, 32, 32)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(currentPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1)
+                    .addComponent(updatePasswordButton))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(99, 99, 99)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(newPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(deleteAccountButton)
+                        .addGap(28, 28, 28)
+                        .addComponent(goBackButton)))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(106, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(currentPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(newPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(77, 77, 77)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(updatePasswordButton)
+                    .addComponent(goBackButton)
+                    .addComponent(deleteAccountButton))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void deleteAccountButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteAccountButtonActionPerformed
+        SQLUtils sql = new SQLUtils(this);
+        sql.delete(String.format("delete from organizers where id=%d;", OrganizerLoginPage.loggedInUser.id));
+        Utils.showMessage(this, "Account has been deleted!");
+        LoginPage.loggedInUser = null;
+        new HomePage().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_deleteAccountButtonActionPerformed
+
+    private void goBackButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_goBackButtonActionPerformed
+        new OrganizerPage().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_goBackButtonActionPerformed
+
+    private void updatePasswordButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updatePasswordButtonActionPerformed
+        Organizer o = OrganizerLoginPage.loggedInUser;
+        Organizer check = new Organizer(new String(currentPasswordField.getPassword()));
+        String newPassword = new String(newPasswordField.getPassword());
+        if (o.verify(check)) {
+            SQLUtils sql = new SQLUtils(this);
+            int n = sql.update(String.format("update organizers set password=%s where id=%d", Utils.encrypt(newPassword), o.id));
+            Utils.showMessage(this, "Password has been changed!");
+            return;
+        }
+        Utils.showMessage(this, "Current password is wrong!");
+    }//GEN-LAST:event_updatePasswordButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -79,5 +174,12 @@ public class OrganizerSettings extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPasswordField currentPasswordField;
+    private javax.swing.JButton deleteAccountButton;
+    private javax.swing.JButton goBackButton;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPasswordField newPasswordField;
+    private javax.swing.JButton updatePasswordButton;
     // End of variables declaration//GEN-END:variables
 }

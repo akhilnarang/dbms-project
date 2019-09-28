@@ -20,6 +20,7 @@ public class Organizer extends DBObject {
         this.password = password;
     }
 
+    Organizer(String password) { this.password = password; }
 
     Organizer(String username, String password) {
         this(-1, username, password);
