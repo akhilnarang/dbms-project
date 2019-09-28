@@ -56,7 +56,7 @@ public class ManageEventsOrganizer extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Name", "Name", "Event"
+                "ID", "User", "Event"
             }
         ));
         eventsTable.setColumnSelectionAllowed(true);
@@ -95,7 +95,7 @@ public class ManageEventsOrganizer extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
-        new UserPage().setVisible(true);
+        new OrganizerPage().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_backButtonActionPerformed
 
@@ -103,26 +103,31 @@ public class ManageEventsOrganizer extends javax.swing.JFrame {
         DefaultTableModel table = (DefaultTableModel) eventsTable.getModel();
         int selectedRow = eventsTable.getSelectedRow();
         int selectedRowId = Integer.parseInt(table.getValueAt(selectedRow, 0).toString());
+        String username = table.getValueAt(selectedRow, 1).toString();
         String event = table.getValueAt(selectedRow, 2).toString();
-        User u = LoginPage.loggedInUser;
+        Organizer o = OrganizerLoginPage.loggedInUser;
         SQLUtils sql = new SQLUtils(this);
-        Map<String, Object> resultSet = sql.selectQueryWhere("organizers.username, events.location", "events, organizers", "events.organizer=organizers.id", "").get(0);
-        String organizer = resultSet.get("username").toString();
-        String location = resultSet.get("location").toString();
-        int n = sql.insert(String.format("insert into registrations (event_id, user_id) values (%d, %d)", selectedRowId, u.id));
+        int n = sql.delete(String.format("delete from registrations where id=%d;", selectedRowId));
+        sql.close();
         if (n != 1) {
-            Utils.showMessage(this, String.format("Error occurred during registration, %d rows modified!", n));
-            return;
-        }
-        String content = String.format("Hello %s, your registration is successfully done for the event %s organized by %s at %s!", u.username, event, organizer, location);
-        int responseCode = Utils.sendEmail(u.email, "Event Registration Mail", content);
-        if (responseCode == 200 || responseCode == 202) {
-            Utils.showMessage(this, "Mail has been sent!");
-        } else {
-            Utils.showMessage(this, "Error occurred sending mail!");
-            return;
+            Utils.showMessage(this, String.format("Error occurred during cancellation, %d rows modified!", n));
         }
     }//GEN-LAST:event_cancelButtonActionPerformed
+
+    void updateTable() {
+        DefaultTableModel table = (DefaultTableModel) eventsTable.getModel();
+        SQLUtils sql = new SQLUtils(this);
+        Organizer o = OrganizerLoginPage.loggedInUser;
+        List<Map<String, Object>> resultSet = sql.selectQuery("registrations.id, username, name", "events, users, registrations", String.format("where organizer=%d)", o.id));
+        sql.close();
+        if (resultSet.isEmpty()) {
+            Utils.showMessage(this, "No events currently available!");
+            backButton.doClick();
+        }
+        for (Map row : resultSet) {
+            table.addRow(new Vector<>(row.values()));
+        }
+    }
 
     /**
      * @param args the command line arguments

@@ -77,7 +77,7 @@ public class OrganizerPage extends javax.swing.JFrame {
                 .addGap(31, 31, 31))
         );
 
-        Welcome.setText(String.format("Welcome, %s!", LoginPage.loggedInUser.username));
+        Welcome.setText(String.format("Welcome, %s!", OrganizerLoginPage.loggedInUser.username));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
