@@ -28,6 +28,8 @@ public class User extends DBObject {
         this(-1, username, password, "", -1);
     }
 
+    User(String password) { this.password = password; }
+
     User(Map<String, Object> user) {
         this(Integer.parseInt(user.get("id").toString()), user.get("username").toString(), user.get("password").toString(), user.get("email").toString(), Long.parseLong(user.get("phone").toString()));
     }
