@@ -104,7 +104,7 @@ public class RegisterEvent extends javax.swing.JFrame {
         User u = LoginPage.loggedInUser;
         SQLUtils sql = new SQLUtils(this);
         Map<String, Object> resultSet = sql.selectQueryWhere("organizers.username, events.location", "events, organizers", "events.organizer=organizers.id", "").get(0);
-        String organizer = resultSet.get("organizer").toString();
+        String organizer = resultSet.get("username").toString();
         String location = resultSet.get("location").toString();
         int n = sql.insert(String.format("insert into registrations (event_id, user_id) values (%d, %d)", selectedRowId, u.id));
         if (n != 1) {
