@@ -4,12 +4,13 @@
  * and open the template in the editor.
  */
 package com.dbmsproject;
+
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
+
 /**
- *
  * @author akhil
  */
 public class ManageEventsUser extends javax.swing.JFrame {
@@ -52,12 +53,12 @@ public class ManageEventsUser extends javax.swing.JFrame {
         });
 
         eventsTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+                new Object[][]{
 
-            },
-            new String [] {
-                "ID", "Name", "Name", "Event"
-            }
+                },
+                new String[]{
+                        "ID", "Name"
+                }
         ));
         eventsTable.setColumnSelectionAllowed(true);
         jScrollPane1.setViewportView(eventsTable);
@@ -66,29 +67,29 @@ public class ManageEventsUser extends javax.swing.JFrame {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(33, 33, 33)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 464, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(cancelButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(backButton)
-                        .addGap(392, 392, 392))))
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addGap(33, 33, 33)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 464, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addComponent(cancelButton)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(backButton)
+                                                .addGap(392, 392, 392))))
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(backButton)
-                    .addComponent(cancelButton))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addGap(20, 20, 20)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(backButton)
+                                        .addComponent(cancelButton))
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -99,30 +100,15 @@ public class ManageEventsUser extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_backButtonActionPerformed
 
-    void updateTable() {
-        DefaultTableModel table = (DefaultTableModel) eventsTable.getModel();
-        SQLUtils sql = new SQLUtils(this);
-        User u = LoginPage.loggedInUser;
-        List<Map<String, Object>> resultSet = sql.selectQuery("name", "events", String.format("where id in ( select event_id from registrations where user_id = %d)", u.id));
-        sql.close();
-        if (resultSet.isEmpty()) {
-            Utils.showMessage(this, "No events currently available!");
-            backButton.doClick();
-        }
-        for (Map row : resultSet) {
-            table.addRow(new Vector<>(row.values()));
-        }
-    }
-
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         DefaultTableModel table = (DefaultTableModel) eventsTable.getModel();
         int selectedRow = eventsTable.getSelectedRow();
         int selectedRowId = Integer.parseInt(table.getValueAt(selectedRow, 0).toString());
-        String event = table.getValueAt(selectedRow, 2).toString();
+        String event = table.getValueAt(selectedRow, 1).toString();
         User u = LoginPage.loggedInUser;
         SQLUtils sql = new SQLUtils(this);
         Map<String, Object> resultSet = sql.selectQueryWhere("organizers.username, events.location", "events, organizers", "events.organizer=organizers.id", "").get(0);
-        String organizer = resultSet.get("organizer").toString();
+        String organizer = resultSet.get("username").toString();
         String location = resultSet.get("location").toString();
         int n = sql.delete(String.format("delete from registrations where event_id = %d and user_id = %d", selectedRowId, u.id));
         if (n != 1) {
@@ -139,14 +125,30 @@ public class ManageEventsUser extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_cancelButtonActionPerformed
 
+
+    void updateTable() {
+        DefaultTableModel table = (DefaultTableModel) eventsTable.getModel();
+        SQLUtils sql = new SQLUtils(this);
+        User u = LoginPage.loggedInUser;
+        List<Map<String, Object>> resultSet = sql.selectQuery("id, name", "events", String.format("where id in ( select event_id from registrations where user_id = %d)", u.id));
+        sql.close();
+        if (resultSet.isEmpty()) {
+            Utils.showMessage(this, "No events currently available!");
+            backButton.doClick();
+        }
+        for (Map row : resultSet) {
+            table.addRow(new Vector<>(row.values()));
+        }
+    }
+
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
