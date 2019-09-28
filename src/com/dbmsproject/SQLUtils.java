@@ -111,7 +111,7 @@ public class SQLUtils {
         try {
             return statement.executeUpdate(query);
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(currentFrame, "Error occurred while running query: " + query + "\n" + e.getMessage());
+            Utils.showMessage(currentFrame, "Error occurred while running query: " + query + "\n" + e.getMessage());
         }
         return -1;
     }
@@ -121,7 +121,7 @@ public class SQLUtils {
         try {
             return statement.executeUpdate(query);
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(currentFrame, "Error occurred while running query: " + query + "\n" + e.getMessage());
+            Utils.showMessage(currentFrame, "Error occurred while running query: " + query + "\n" + e.getMessage());
         }
         return -1;
     }
@@ -132,9 +132,19 @@ public class SQLUtils {
         try {
             return statement.executeUpdate(query);
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(currentFrame, "Error occurred while running query: " + query + "\n" + e.getMessage());
+            Utils.showMessage(currentFrame, "Error occurred while running query: " + query + "\n" + e.getMessage());
         }
         return -1;
+    }
+
+    // This method deletes rows from the table
+    int delete(String query) {
+        if (DEBUG) System.out.println(query);
+        try {
+            return statement.executeUpdate(query);
+        } catch (SQLException e) {
+            Utils.showMessage(currentFrame, "Error occurred while running query: " + query + "\n" + e.getMessage());
+        }
     }
 
     // This method closes the statement and connection objects
@@ -143,7 +153,7 @@ public class SQLUtils {
             statement.close();
             connection.close();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(currentFrame, "Error occurred while closing connection to database!\n" + e.getMessage());
+            Utils.showMessage(currentFrame, "Error occurred while closing connection to database!\n" + e.getMessage());
         }
     }
 

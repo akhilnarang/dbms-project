@@ -45,6 +45,11 @@ public class UserSettings extends javax.swing.JFrame {
         });
 
         deleteAccountButton.setText("Delete account");
+        deleteAccountButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteAccountButtonActionPerformed(evt);
+            }
+        });
 
         goBackButton.setText("Go back");
         goBackButton.addActionListener(new java.awt.event.ActionListener() {
@@ -123,6 +128,15 @@ public class UserSettings extends javax.swing.JFrame {
         }
         Utils.showMessage(this, "Current password is wrong!");
     }//GEN-LAST:event_updatePasswordButtonActionPerformed
+
+    private void deleteAccountButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteAccountButtonActionPerformed
+        SQLUtils sql = new SQLUtils(this);
+        sql.delete(String.format("delete from users where id=%d;", LoginPage.loggedInUser.id));
+        Utils.showMessage(this, "Account has been deleted!");
+        LoginPage.loggedInUser = null;
+        new HomePage().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_deleteAccountButtonActionPerformed
 
     /**
      * @param args the command line arguments
