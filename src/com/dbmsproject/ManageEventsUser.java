@@ -103,7 +103,7 @@ public class ManageEventsUser extends javax.swing.JFrame {
         DefaultTableModel table = (DefaultTableModel) eventsTable.getModel();
         SQLUtils sql = new SQLUtils(this);
         User u = LoginPage.loggedInUser;
-        List<Map<String, Object>> resultSet = sql.selectQuery("event_id", "registrations", String.format("where id =  ( select event_id from registrations where user_id = %d)", u.id));
+        List<Map<String, Object>> resultSet = sql.selectQuery("event_id", "registrations", String.format("where id in ( select event_id from registrations where user_id = %d)", u.id));
         sql.close();
         if (resultSet.isEmpty()) {
             Utils.showMessage(this, "No events currently available!");
