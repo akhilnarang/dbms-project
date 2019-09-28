@@ -4,7 +4,10 @@
  * and open the template in the editor.
  */
 package com.dbmsproject;
-
+import javax.swing.table.DefaultTableModel;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
 /**
  *
  * @author akhil
@@ -27,21 +30,99 @@ public class ManageEventsOrganizer extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        backButton = new javax.swing.JButton();
+        cancelButton = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        eventsTable = new javax.swing.JTable();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        backButton.setText("Back");
+        backButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backButtonActionPerformed(evt);
+            }
+        });
+
+        cancelButton.setText("Cancel Entry");
+        cancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButtonActionPerformed(evt);
+            }
+        });
+
+        eventsTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Name", "Name", "Event"
+            }
+        ));
+        eventsTable.setColumnSelectionAllowed(true);
+        jScrollPane1.setViewportView(eventsTable);
+        updateTable();
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(33, 33, 33)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 464, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(cancelButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(backButton)
+                        .addGap(392, 392, 392))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(backButton)
+                    .addComponent(cancelButton))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
+        new UserPage().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_backButtonActionPerformed
+
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+        DefaultTableModel table = (DefaultTableModel) eventsTable.getModel();
+        int selectedRow = eventsTable.getSelectedRow();
+        int selectedRowId = Integer.parseInt(table.getValueAt(selectedRow, 0).toString());
+        String event = table.getValueAt(selectedRow, 2).toString();
+        User u = LoginPage.loggedInUser;
+        SQLUtils sql = new SQLUtils(this);
+        Map<String, Object> resultSet = sql.selectQueryWhere("organizers.username, events.location", "events, organizers", "events.organizer=organizers.id", "").get(0);
+        String organizer = resultSet.get("username").toString();
+        String location = resultSet.get("location").toString();
+        int n = sql.insert(String.format("insert into registrations (event_id, user_id) values (%d, %d)", selectedRowId, u.id));
+        if (n != 1) {
+            Utils.showMessage(this, String.format("Error occurred during registration, %d rows modified!", n));
+            return;
+        }
+        String content = String.format("Hello %s, your registration is successfully done for the event %s organized by %s at %s!", u.username, event, organizer, location);
+        int responseCode = Utils.sendEmail(u.email, "Event Registration Mail", content);
+        if (responseCode == 200 || responseCode == 202) {
+            Utils.showMessage(this, "Mail has been sent!");
+        } else {
+            Utils.showMessage(this, "Error occurred sending mail!");
+            return;
+        }
+    }//GEN-LAST:event_cancelButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -79,5 +160,9 @@ public class ManageEventsOrganizer extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton backButton;
+    private javax.swing.JButton cancelButton;
+    private javax.swing.JTable eventsTable;
+    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }
