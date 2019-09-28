@@ -135,6 +135,7 @@ public class SQLUtils {
         } catch (SQLException e) {
             Utils.showMessage(currentFrame, "Error occurred while running query: " + query + "\n" + e.getMessage());
         }
+        return -1;
     }
 
     // This method closes the statement and connection objects
