@@ -20,9 +20,9 @@ For database connection, this project requires a `login.properties` file placed 
 If not set, it will assume default values, which are
 
 ```
-username=root
-password=student123
-database=project
-hostname=localhost
-port=3306
+username = root
+password = student123
+database = project
+hostname = localhost
+port = 3306
 ```
